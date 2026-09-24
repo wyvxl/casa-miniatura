@@ -264,16 +264,16 @@ function lastimar(desde) {
     cartel('¡Ay!', 'Se acabaron los corazones. Volvemos a empezar el cuarto.', 0, { txt: 'Otra vez', fn: () => cargarCuarto(S.cuarto) });
   }
 }
-// Sorpresa solo para Franco: al perder el último corazón sale su carta ("Modo: destrucción masiva") unos 2 s,
+// Sorpresa solo para Franco: al perder el último corazón sale su carta ("Modo: destrucción masiva") unos 4 s,
 // recibe un corazón extra y queda parpadeando en rojo hasta el final del cuarto. Una vez por cuarto.
 function modoFuria() {
   const p = S.p;
-  S.extraUsada = true; S.vidas = 1; S.congelado = 2.1;
-  p.furia = true; p.inv = 3.5; p.golpe = 0; p.vx = 0; p.vy = 0;
+  S.extraUsada = true; S.vidas = 1; S.congelado = 4.1;
+  p.furia = true; p.inv = 5.5; p.golpe = 0; p.vx = 0; p.vy = 0;
   const carta = document.getElementById('carta');
   carta.hidden = false; carta.classList.remove('sale'); void carta.offsetWidth; carta.classList.add('sale');
   SON.efecto('furia');
-  setTimeout(() => { carta.hidden = true; carta.classList.remove('sale'); }, 2100);
+  setTimeout(() => { carta.hidden = true; carta.classList.remove('sale'); }, 4100);
 }
 function siguiente() {
   const i = ORDEN.indexOf(S.cuarto), sig = ORDEN[(i + 1) % ORDEN.length];

@@ -85,9 +85,9 @@
   #carta { position: fixed; inset: 0; display: grid; place-items: center; background: radial-gradient(rgba(120,0,0,.55), rgba(10,0,0,.85)); z-index: 5; pointer-events: none; }
   #carta img { height: min(86vh, 150vw); max-width: 92vw; object-fit: contain; border: 3px solid #f5c531; border-radius: 12px; box-shadow: 0 0 40px #ff3a20; }
   #carta span { position: absolute; bottom: 5vh; font-weight: 900; font-size: clamp(22px, 6vh, 44px); color: #fff; text-shadow: 0 0 10px #ff3a20, 2px 2px 0 #7a0a00; letter-spacing: .06em; }
-  #carta.sale img { animation: carta 2.1s ease-out both; }
-  #carta.sale span { animation: vida 2.1s ease-out both; }
-  #carta.sale { animation: fondo 2.1s ease-out both; }
+  #carta.sale img { animation: carta 4.1s ease-out both; }
+  #carta.sale span { animation: vida 4.1s ease-out both; }
+  #carta.sale { animation: fondo 4.1s ease-out both; }
   @keyframes carta { 0% { transform: scale(.3) rotate(-8deg); opacity: 0; filter: brightness(3); } 12% { transform: scale(1.06) rotate(2deg); opacity: 1; filter: brightness(1.6); } 20% { transform: scale(1) rotate(0); filter: brightness(1); } 85% { transform: scale(1.02); opacity: 1; } 100% { transform: scale(1.15); opacity: 0; } }
   @keyframes vida { 0%, 25% { opacity: 0; transform: translateY(20px); } 35% { opacity: 1; transform: translateY(0); } 85% { opacity: 1; } 100% { opacity: 0; } }
   @keyframes fondo { 0% { opacity: 0; } 8% { opacity: 1; } 88% { opacity: 1; } 100% { opacity: 0; } }
