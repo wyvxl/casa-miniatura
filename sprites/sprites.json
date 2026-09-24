@@ -1,0 +1,277 @@
+{
+ "franco": {
+  "w": 23,
+  "h": 43,
+  "n": 9,
+  "anims": {
+   "correr": {
+    "frames": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    "fps": 10
+   },
+   "quieto": {
+    "frames": [
+     5
+    ],
+    "fps": 1
+   },
+   "hola": {
+    "frames": [
+     6,
+     7
+    ],
+    "fps": 4
+   },
+   "pose": {
+    "frames": [
+     8
+    ],
+    "fps": 1
+   },
+   "saltar": {
+    "frames": [
+     1
+    ],
+    "fps": 1
+   },
+   "caer": {
+    "frames": [
+     3
+    ],
+    "fps": 1
+   }
+  }
+ },
+ "alayna": {
+  "w": 24,
+  "h": 45,
+  "n": 9,
+  "anims": {
+   "correr": {
+    "frames": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    "fps": 10
+   },
+   "quieto": {
+    "frames": [
+     5
+    ],
+    "fps": 1
+   },
+   "hola": {
+    "frames": [
+     6,
+     7
+    ],
+    "fps": 4
+   },
+   "pose": {
+    "frames": [
+     8
+    ],
+    "fps": 1
+   },
+   "saltar": {
+    "frames": [
+     1
+    ],
+    "fps": 1
+   },
+   "caer": {
+    "frames": [
+     3
+    ],
+    "fps": 1
+   }
+  }
+ },
+ "amanda": {
+  "w": 26,
+  "h": 49,
+  "n": 9,
+  "anims": {
+   "correr": {
+    "frames": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    "fps": 10
+   },
+   "quieto": {
+    "frames": [
+     5
+    ],
+    "fps": 1
+   },
+   "hola": {
+    "frames": [
+     6,
+     7
+    ],
+    "fps": 4
+   },
+   "pose": {
+    "frames": [
+     8
+    ],
+    "fps": 1
+   },
+   "saltar": {
+    "frames": [
+     1
+    ],
+    "fps": 1
+   },
+   "caer": {
+    "frames": [
+     3
+    ],
+    "fps": 1
+   }
+  }
+ },
+ "keylin": {
+  "w": 28,
+  "h": 50,
+  "n": 9,
+  "anims": {
+   "correr": {
+    "frames": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    "fps": 10
+   },
+   "quieto": {
+    "frames": [
+     5
+    ],
+    "fps": 1
+   },
+   "hola": {
+    "frames": [
+     7,
+     8
+    ],
+    "fps": 3
+   },
+   "pose": {
+    "frames": [
+     6
+    ],
+    "fps": 1
+   },
+   "saltar": {
+    "frames": [
+     1
+    ],
+    "fps": 1
+   },
+   "caer": {
+    "frames": [
+     3
+    ],
+    "fps": 1
+   }
+  }
+ },
+ "maritza": {
+  "w": 42,
+  "h": 54,
+  "n": 8,
+  "anims": {
+   "correr": {
+    "frames": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    "fps": 9
+   },
+   "quieto": {
+    "frames": [
+     0
+    ],
+    "fps": 1
+   },
+   "sentada": {
+    "frames": [
+     5,
+     6
+    ],
+    "fps": 1
+   },
+   "hola": {
+    "frames": [
+     7
+    ],
+    "fps": 1
+   },
+   "saltar": {
+    "frames": [
+     1
+    ],
+    "fps": 1
+   },
+   "caer": {
+    "frames": [
+     3
+    ],
+    "fps": 1
+   }
+  }
+ },
+ "marshall": {
+  "w": 23,
+  "h": 21,
+  "n": 8,
+  "anims": {
+   "correr": {
+    "frames": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    "fps": 12
+   },
+   "saltar": {
+    "frames": [
+     5
+    ],
+    "fps": 1
+   },
+   "caer": {
+    "frames": [
+     6
+    ],
+    "fps": 1
+   },
+   "quieto": {
+    "frames": [
+     7
+    ],
+    "fps": 1
+   }
+  }
+ }
+}

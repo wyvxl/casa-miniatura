@@ -1,0 +1,152 @@
+{
+ "patio": {
+  "suelo": 184,
+  "w": 768,
+  "h": 216,
+  "capas": [
+   {
+    "id": "cielo",
+    "file": "patio/cielo.png",
+    "factor": 0.0
+   },
+   {
+    "id": "lejos",
+    "file": "patio/lejos.png",
+    "factor": 0.15
+   },
+   {
+    "id": "medio",
+    "file": "patio/medio.png",
+    "factor": 0.4
+   },
+   {
+    "id": "cerca",
+    "file": "patio/cerca.png",
+    "factor": 0.7
+   },
+   {
+    "id": "suelo",
+    "file": "patio/suelo.png",
+    "factor": 1.0
+   },
+   {
+    "id": "frente",
+    "file": "patio/frente.png",
+    "factor": 1.35
+   }
+  ]
+ },
+ "cocina": {
+  "suelo": 184,
+  "w": 768,
+  "h": 216,
+  "capas": [
+   {
+    "id": "pared",
+    "file": "cocina/pared.png",
+    "factor": 0.08
+   },
+   {
+    "id": "medio",
+    "file": "cocina/medio.png",
+    "factor": 0.4
+   },
+   {
+    "id": "cerca",
+    "file": "cocina/cerca.png",
+    "factor": 0.72
+   },
+   {
+    "id": "suelo",
+    "file": "cocina/suelo.png",
+    "factor": 1.0
+   }
+  ]
+ },
+ "sala": {
+  "suelo": 184,
+  "w": 768,
+  "h": 216,
+  "capas": [
+   {
+    "id": "pared",
+    "file": "sala/pared.png",
+    "factor": 0.08
+   },
+   {
+    "id": "medio",
+    "file": "sala/medio.png",
+    "factor": 0.4
+   },
+   {
+    "id": "cerca",
+    "file": "sala/cerca.png",
+    "factor": 0.72
+   },
+   {
+    "id": "suelo",
+    "file": "sala/suelo.png",
+    "factor": 1.0
+   }
+  ]
+ },
+ "cuarto": {
+  "suelo": 184,
+  "w": 768,
+  "h": 216,
+  "capas": [
+   {
+    "id": "pared",
+    "file": "cuarto/pared.png",
+    "factor": 0.08
+   },
+   {
+    "id": "medio",
+    "file": "cuarto/medio.png",
+    "factor": 0.42
+   },
+   {
+    "id": "cerca",
+    "file": "cuarto/cerca.png",
+    "factor": 0.72
+   },
+   {
+    "id": "suelo",
+    "file": "cuarto/suelo.png",
+    "factor": 1.0
+   }
+  ]
+ },
+ "bano": {
+  "suelo": 184,
+  "w": 768,
+  "h": 216,
+  "capas": [
+   {
+    "id": "pared",
+    "file": "bano/pared.png",
+    "factor": 0.08
+   },
+   {
+    "id": "medio",
+    "file": "bano/medio.png",
+    "factor": 0.45
+   },
+   {
+    "id": "cerca",
+    "file": "bano/cerca.png",
+    "factor": 0.72
+   },
+   {
+    "id": "suelo",
+    "file": "bano/suelo.png",
+    "factor": 1.0
+   },
+   {
+    "id": "frente",
+    "file": "bano/frente.png",
+    "factor": 1.3
+   }
+  ]
+ }
+}

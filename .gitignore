@@ -1,0 +1,6 @@
+# Material de trabajo: no se publica
+referencias/
+_revision/
+herramientas/viejo/
+__pycache__/
+*.pyc
