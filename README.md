@@ -17,8 +17,11 @@ saltando sobre la leña y Marshall, sin botones ni marcador). WhatsApp guarda la
 Doble clic en `index.html`. Funciona desde el disco (`file://`) y sin internet: nada de módulos, `fetch` ni CDNs. Por eso los
 datos de los `.json` van juntos en `datos.js` (lo arma `herramientas/datos.py`).
 
-En el teléfono: botones grandes (◀ ▶ abajo a la izquierda, 👋 y ▲ a la derecha), pantalla completa al tocar *Jugar* y un aviso
-para girar el teléfono si está parado. En la compu: ← → caminar, espacio / ↑ / W / Z saltar (más tiempo apretado, más alto),
+En el teléfono: **tocar la pantalla salta** (al soltar, si el dedo no se movió) y **deslizar a un lado camina** para ese lado
+mientras el dedo siga ahí (cada dedo va por su lado: con uno se camina y con otro se salta). Siguen los botones grandes (◀ ▶ abajo
+a la izquierda, 👋 y ▲ a la derecha), pantalla completa al tocar *Jugar* y un aviso para girar el teléfono si está parado.
+Arriba a la derecha: **cambiar de personaje** (con su carita), **pantalla completa** (no sale en el iPhone, Safari no lo permite),
+sonido y menú. En la compu: ← → caminar, espacio / ↑ / W / Z saltar (más tiempo apretado, más alto),
 H saludar, 1–5 cambiar de personaje, M sonido, Esc menú. También sirve un control de videojuego (palanca o cruz y botón A).
 
 ## Cómo se juega

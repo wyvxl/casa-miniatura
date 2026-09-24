@@ -36,6 +36,10 @@
   .esquina button { width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); font-size: 18px; display: grid; place-items: center; padding: 0; }
   .b-sonido svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .b-sonido .parl { fill: currentColor; }
+  #b-quien canvas { width: 30px; height: 30px; image-rendering: pixelated; }
+  #b-pantalla svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  #b-pantalla .cerrar, #b-pantalla.en .abrir { display: none; }
+  #b-pantalla.en .cerrar { display: inline; }
   .b-sonido .cruz { display: none; stroke: #ff7a6a; }
   .b-sonido.mudo .ondas { display: none; }
   .b-sonido.mudo .cruz { display: inline; }
@@ -59,7 +63,8 @@
   #p-donde button { border-radius: 9px; border: 1px solid var(--line); background: rgba(255, 255, 255, .04); padding: 6px 12px; font-size: 14px; }
   #p-quien button[aria-pressed="true"], #p-donde button[aria-pressed="true"] { background: var(--acc); color: var(--acc-ink); border-color: var(--acc); font-weight: 700; }
   #p-jugar { margin-top: 4px; background: var(--acc); color: var(--acc-ink); border: 0; border-radius: 12px; padding: 11px 34px; font-size: 18px; font-weight: 800; box-shadow: 0 3px 0 #9a6a08; }
-  .teclas { margin: 12px 0 0; font-size: 12px; color: var(--dim); }
+  .teclas, .tocar { margin: 12px 0 0; font-size: 12px; color: var(--dim); }
+  .tocar { display: none; }
 
   /* controles del teléfono */
   .tactil { position: fixed; bottom: max(12px, env(safe-area-inset-bottom)); display: none; gap: 14px; align-items: flex-end; }
@@ -73,6 +78,7 @@
   @media (pointer: coarse) {
     .tactil { display: flex; }
     .teclas { display: none; }
+    .tocar { display: block; }
   }
   @media (pointer: coarse) and (orientation: portrait) { #girar { display: grid; } }
 </style>
@@ -90,6 +96,8 @@
 </div>
 <div class="esquina">
   <button id="b-son" class="b-sonido" type="button" aria-label="Apagar el sonido"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="parl" d="M4 9h4l5-4v14l-5-4H4z"/><path class="ondas" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/><path class="cruz" d="M16 9l6 6M22 9l-6 6"/></svg></button>
+  <button id="b-quien" type="button" aria-label="Cambiar de personaje"><canvas id="c-quien" width="20" height="20"></canvas></button>
+  <button id="b-pantalla" type="button" aria-label="Pantalla completa" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path class="abrir" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path class="cerrar" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg></button>
   <button id="b-menu" type="button" aria-label="Menú">☰</button>
 </div>
 <div id="aviso" role="status" hidden><b id="aviso-t"></b><span id="aviso-s"></span><br><button id="aviso-b" type="button" hidden></button></div>
@@ -102,6 +110,7 @@
     <div class="fila" id="p-donde"><h2>¿Dónde empiezas?</h2></div>
     <div class="botones"><button id="p-jugar" type="button">Jugar</button>
     <button id="p-son" class="b-sonido chip" type="button" aria-label="Apagar el sonido"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="parl" d="M4 9h4l5-4v14l-5-4H4z"/><path class="ondas" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/><path class="cruz" d="M16 9l6 6M22 9l-6 6"/></svg><span class="txt">Sonido prendido</span></button></div>
+    <p class="tocar">En el teléfono: toca la pantalla para saltar y desliza el dedo para caminar.</p>
     <p class="teclas">← → caminar · espacio saltar (más tiempo, más alto) · H saludar · 1–5 cambiar · M sonido · Esc menú</p>
   </div>
 </div>

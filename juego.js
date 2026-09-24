@@ -169,6 +169,47 @@ boton('b-izq', () => K.tIzq = true, () => K.tIzq = false);
 boton('b-der', () => K.tDer = true, () => K.tDer = false);
 boton('b-salto', apretarSalto, soltarSalto);
 boton('b-hola', saludar);
+
+// Tocar y deslizar sobre la pantalla del juego (además de los botones):
+//   tocar y soltar sin mover el dedo = saltar · deslizar a un lado y dejar el dedo = caminar para ese lado.
+// Cada dedo va por su lado: con uno se desliza y con otro se toca para saltar mientras camina.
+const DEDOS = new Map();
+const MUERTO = 14;                                   // px de pantalla que hay que mover para que cuente como deslizar
+let dedoDir = 0;
+function dirDedos() {
+  dedoDir = 0;
+  for (const d of DEDOS.values()) if (d.dir) dedoDir = d.dir;
+}
+const zona = document.getElementById('juego');
+zona.addEventListener('pointerdown', e => {
+  if (!S.jugando || e.pointerType === 'mouse') return;
+  e.preventDefault();
+  zona.setPointerCapture && zona.setPointerCapture(e.pointerId);
+  DEDOS.set(e.pointerId, { x0: e.clientX, x: e.clientX, t0: performance.now(), dir: 0, movio: false });
+});
+zona.addEventListener('pointermove', e => {
+  const d = DEDOS.get(e.pointerId);
+  if (!d) return;
+  const dx = e.clientX - d.x0;
+  if (Math.abs(dx) > MUERTO) {
+    d.movio = true;
+    d.dir = Math.sign(dx);
+    d.x0 = e.clientX - d.dir * MUERTO;               // el punto de partida sigue al dedo: devolverlo lo voltea enseguida
+  }
+  dirDedos();
+});
+function soltarDedo(e) {
+  const d = DEDOS.get(e.pointerId);
+  if (!d) return;
+  DEDOS.delete(e.pointerId);
+  dirDedos();
+  if (e.type === 'pointerup' && !d.movio && performance.now() - d.t0 < 450) {
+    apretarSalto();                                  // salto entero: se deja "apretado" un momento
+    setTimeout(soltarSalto, 220);
+  }
+}
+zona.addEventListener('pointerup', soltarDedo);
+zona.addEventListener('pointercancel', soltarDedo);
 function saludar() { if (S.p && S.p.piso) { S.p.hola = 1.2; if (Math.random() < 0.6) setTimeout(() => SON.ladrar(2), 400); } }
 let padSalto = false;
 function leerControl() {
@@ -183,8 +224,23 @@ function leerControl() {
   return ax || dx;
 }
 
+// La carita del personaje en el botón de cambiar (la parte de arriba de su primer cuadro)
+function pintarQuien() {
+  const c = document.getElementById('c-quien'), m = D.sprites[S.quien], im = IMG['sprites/' + S.quien + '.png'];
+  if (!c || !m) return;
+  const x = c.getContext('2d'), f = m.anims.quieto.frames[0];
+  const dibu = () => { x.imageSmoothingEnabled = false; x.clearRect(0, 0, 20, 20); x.drawImage(im, f * m.w + Math.floor((m.w - 20) / 2), 1, 20, 20, 0, 0, 20, 20); };
+  im.complete ? dibu() : im.addEventListener('load', dibu, { once: true });
+  const b = document.getElementById('b-quien');
+  if (b) b.setAttribute('aria-label', 'Cambiar de personaje (ahora: ' + PJ[S.quien].nombre + ')');
+}
+function siguientePJ() {
+  const ks = Object.keys(PJ), k = ks[(ks.indexOf(S.quien) + 1) % ks.length];
+  elegir(k);
+  if (S.jugando && !S.fin) cartel(PJ[k].nombre, '', 900);
+}
 function elegir(k) {
-  S.quien = k; marcar();
+  S.quien = k; marcar(); pintarQuien();
   document.querySelectorAll('[data-pj]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pj === k)));
 }
 
@@ -223,7 +279,7 @@ const toca = (ax, ay, aw, ah, bx, by, bw, bh) => ax < bx + bw && ax + aw > bx &&
 function paso(dt) {
   const p = S.p, pj = PJ[S.quien], alto = D.sprites[S.quien].h * 0.8;
   const pad = leerControl();
-  const izq = K.ArrowLeft || K.a || K.A || K.tIzq, der = K.ArrowRight || K.d || K.D || K.tDer;
+  const izq = K.ArrowLeft || K.a || K.A || K.tIzq || dedoDir < 0, der = K.ArrowRight || K.d || K.D || K.tDer || dedoDir > 0;
   let quiere = (der ? 1 : 0) - (izq ? 1 : 0) || Math.sign(pad);
   if (S.fin || p.golpe > 0) quiere = 0;
   if (quiere) { p.mira = quiere; p.hola = 0; }
@@ -657,6 +713,31 @@ ORDEN.forEach((k, i) => {
 });
 document.getElementById('p-jugar').onclick = jugar;
 document.getElementById('b-menu').onclick = menu;
+document.getElementById('b-quien').onclick = e => { siguientePJ(); e.currentTarget.blur(); };
+pintarQuien();
+// Pantalla completa (donde el navegador lo permite; en el iPhone Safari no deja, y el botón no sale)
+const raiz = document.documentElement, bPant = document.getElementById('b-pantalla');
+const pedirPC = raiz.requestFullscreen || raiz.webkitRequestFullscreen;
+const salirPC = document.exitFullscreen || document.webkitExitFullscreen;
+const enPC = () => document.fullscreenElement || document.webkitFullscreenElement;
+if (pedirPC) {
+  bPant.hidden = false;
+  bPant.onclick = () => {
+    try {
+      const r = enPC() ? salirPC.call(document) : pedirPC.call(raiz);
+      if (r && r.catch) r.catch(() => { });
+      if (!enPC() && screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => { });
+    } catch (e) { }
+    bPant.blur();
+  };
+  const marcarPC = () => {
+    bPant.classList.toggle('en', !!enPC());
+    bPant.setAttribute('aria-label', enPC() ? 'Salir de pantalla completa' : 'Pantalla completa');
+    ajustar();
+  };
+  document.addEventListener('fullscreenchange', marcarPC);
+  document.addEventListener('webkitfullscreenchange', marcarPC);
+}
 document.querySelectorAll('.b-sonido').forEach(b => b.onclick = alternarSonido);
 pintarSonido();
 
