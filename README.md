@@ -9,6 +9,9 @@ repositorio https://github.com/wyvxl/casa-miniatura (aparte del modelo 3D). El `
 (las hojas y dibujos de trabajo), `_revision/` y `herramientas/viejo/`. Para actualizar: `git add . && git commit -m "…" && git push`;
 GitHub Pages tarda uno o dos minutos.
 
+**Vista previa en WhatsApp** (2026-09-24): las etiquetas `og:` del `<head>` y `vista-previa.jpg` (1200 × 630: el patio con Franco
+saltando sobre la leña y Marshall, sin botones ni marcador). WhatsApp guarda la vista previa de cada link por un tiempo.
+
 ## Cómo abrirlo
 
 Doble clic en `index.html`. Funciona desde el disco (`file://`) y sin internet: nada de módulos, `fetch` ni CDNs. Por eso los
