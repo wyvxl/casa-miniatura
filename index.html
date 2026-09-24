@@ -81,9 +81,30 @@
     .tocar { display: block; }
   }
   @media (pointer: coarse) and (orientation: portrait) { #girar { display: grid; } }
+  /* Con el menú abierto no se ven los botones del juego */
+  body.en-menu .esquina, body.en-menu .tactil { display: none !important; }
+  /* Pantallas bajas (el teléfono acostado): el menú entero sin deslizar */
+  @media (max-height: 520px) {
+    #portada { padding: 6px; }
+    .tarjeta { padding: 8px 12px 10px; border-radius: 14px; width: min(620px, 100%); }
+    h1 { font-size: 20px; }
+    .sub { display: none; }
+    .fila { margin: 3px 0 5px; gap: 5px; }
+    .fila h2 { font-size: 10px; margin: 0; }
+    #p-quien button { width: 70px; padding: 3px 2px 3px; font-size: 12px; gap: 0; border-radius: 10px; }
+    #p-quien canvas { width: 36px; height: 46px; }
+    #p-donde button { padding: 4px 10px; font-size: 13px; }
+    #p-jugar { padding: 8px 30px; font-size: 16px; }
+    .chip { padding: 7px 12px; font-size: 13px; }
+    .teclas, .tocar { margin: 6px 0 0; font-size: 11px; }
+  }
+  @media (max-height: 340px) {
+    .fila h2 { display: none; }
+    #p-quien canvas { width: 30px; height: 38px; }
+  }
 </style>
 </head>
-<body>
+<body class="en-menu">
 <div id="juego"><canvas id="c" width="384" height="216" aria-label="La casa en miniatura"></canvas></div>
 
 <div class="tactil" id="t-izq">

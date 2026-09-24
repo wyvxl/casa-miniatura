@@ -660,6 +660,7 @@ addEventListener('resize', ajustar); ajustar();
 function menu() {
   S.jugando = false;
   document.getElementById('portada').hidden = false;
+  document.body.classList.add('en-menu');
   avisoEl.hidden = true;
 }
 function alternarSonido() {
@@ -678,6 +679,7 @@ function pintarSonido() {
 function jugar() {
   SON.iniciar();
   document.getElementById('portada').hidden = true;
+  document.body.classList.remove('en-menu');
   S.jugando = true;
   const cuarto = document.querySelector('[data-cuarto][aria-pressed="true"]').dataset.cuarto;
   S.colones = 0;
