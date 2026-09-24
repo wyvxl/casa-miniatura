@@ -81,5 +81,34 @@ const NIVELES = {
     tesoro: ['canica', 1335, 135],
     npc: [],
   },
+  corredor: {
+    nombre: 'El corredor', musica: 'corredor', hundir: 6,
+    cosas: [
+      ['p:tapete', 120, 'adorno'],
+      ['p:sabila', 200], ['p:cubeta', 330], ['p:botas', 460], ['p:trampa', 590], ['p:silla_roja', 680], ['o:maceta_c', 760],
+      ['p:tenis', 860, 'adorno'], ['p:regadera', 960], ['p:sabila', 1100], ['p:balde_patio', 1240], ['p:trampa', 1370],
+      ['p:silla_azul', 1450], ['p:cubeta', 1500], ['o:maceta_b', 1640], ['p:sabila', 1800], ['p:paraguero', 1960, 'adorno'], ['p:botas', 2040],
+    ],
+    enemigos: [['larva', 390, 50], ['polilla', 800, 250, 90], ['larva', 1300, 50], ['polilla', 1680, 250, 100]],
+    monedas: [[200, 60, 3], [330, 70, 3], [460, 90, 3], [680, 80, 3], [960, 90, 3], [1240, 100, 3], [1460, 90, 3], [1640, 70, 3], [2040, 90, 3]],
+    estrellas: [[215, 70], [345, 80], [480, 100], [700, 90], [980, 100], [1260, 110], [1520, 110], [1815, 70]],
+    tesoro: ['p:rueda', 1510, 118],
+    npc: [['amanda', 'pose', 2170]],
+  },
+  keylin: {
+    nombre: 'La casa de Keylin', musica: 'keylin', hundir: 6,
+    cosas: [
+      ['p:bloque', 160], ['p:bloque', 202], ['p:bloque', 181], ['p:saco', 320], ['o:maceta_b', 450], ['o:cactus', 560],
+      ['p:bloque', 640], ['p:bloque', 682], ['p:bloque', 661], ['p:bloque', 661], ['p:cubeta', 820], ['p:saco', 950],
+      ['p:saco', 956], ['p:heliconia', 1090, 'adorno'], ['p:silla_morada', 1200], ['p:bloque', 1340], ['p:bloque', 1382],
+      ['o:cactus', 1450], ['p:bloque', 1520], ['p:bloque', 1562], ['p:bloque', 1541], ['o:maceta_c', 1700],
+      ['p:saco', 1830], ['p:cubeta', 1990], ['p:bloque', 2060],
+    ],
+    enemigos: [['hormiga', 250, 50], ['hormiga', 720, 80], ['hormiga', 1100, 90], ['hormiga', 1620, 60], ['caracol', 1900, 60]],
+    monedas: [[165, 60, 3], [320, 50, 3], [450, 60, 2], [650, 80, 3], [820, 60, 2], [955, 70, 3], [1200, 70, 2], [1345, 50, 3], [1525, 80, 3], [1830, 50, 3]],
+    estrellas: [[190, 70], [340, 60], [560, 80], [670, 90], [965, 80], [1215, 90], [1550, 90], [2070, 50]],
+    tesoro: ['p:colon_oro', 1545, 100],
+    npc: [['keylin', 'hola', 2190]],
+  },
 };
-const ORDEN = ['patio', 'cocina', 'sala', 'cuarto', 'bano'];
+const ORDEN = ['patio', 'cocina', 'sala', 'cuarto', 'bano', 'corredor', 'keylin'];

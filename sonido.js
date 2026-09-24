@@ -83,6 +83,12 @@ const SON = (() => {
       const t = ctx.currentTime; ruido(t, 0.12, 0.4, 'bandpass', 700, 0.6);
       [79, 84, 91].forEach((m, i) => nota(t + 0.1 + i * 0.08, m, 0.2, { type: 'triangle', vol: 0.16, s: 0.3, r: 0.3, rev: 0.5 }, fx));
     },
+    furia() {                                   // poder: barrido que sube, golpe y acorde en rojo
+      const t = ctx.currentTime;
+      barrido(t, 'sawtooth', 110, 880, 0.5, 0.12); ruido(t, 0.18, 0.5, 'highpass', 2500);
+      bombo(t + 0.5, 0.6); ruido(t + 0.5, 0.25, 0.35, 'lowpass', 900);
+      [48, 55, 60, 64, 67, 72].forEach((m, i) => nota(t + 0.52 + i * 0.03, m, 0.9, { type: 'sawtooth', vol: 0.06, s: 0.6, r: 0.5, cut: 2400, rev: 0.4 }, fx));
+    },
     ay() { const t = ctx.currentTime; [72, 67, 64, 60].forEach((m, i) => nota(t + i * 0.14, m, 0.12, { vol: 0.1, s: 0.6 }, fx)); },
     ladrido(veces) {
       const t0 = ctx.currentTime + 0.01, n = veces || 3;
@@ -103,7 +109,7 @@ const SON = (() => {
   // --- música: una canción por cuarto (8 compases en corcheas; '-' sostiene, '.' calla)
   const N = s => { const m = /^([A-G])(#|b)?(\d)$/.exec(s); const b = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[m[1]]; return 12 * (+m[3] + 1) + b + (m[2] === '#' ? 1 : m[2] === 'b' ? -1 : 0); };
   const AC = { G: ['G3', 'B3', 'D4'], D: ['D3', 'F#3', 'A3'], Em: ['E3', 'G3', 'B3'], C: ['C3', 'E3', 'G3'], F: ['F3', 'A3', 'C4'],
-    Dm: ['D3', 'F3', 'A3'], Bb: ['Bb2', 'D3', 'F3'], Am: ['A2', 'C3', 'E3'], Bm: ['B2', 'D3', 'F#3'], A: ['A2', 'C#3', 'E3'] };
+    Dm: ['D3', 'F3', 'A3'], Bb: ['Bb2', 'D3', 'F3'], Am: ['A2', 'C3', 'E3'], Bm: ['B2', 'D3', 'F#3'], A: ['A2', 'C#3', 'E3'], E: ['E3', 'G#3', 'B3'] };
   const CANC = {
     patio: { bpm: 138, acordes: 'G D Em C G D C D', estilo: 'alegre',
       mel: 'D5 - B4 G4 A4 B4 D5 - | A4 - F#4 A4 D5 - C5 B4 | B4 - G4 B4 E5 D5 B4 G4 | A4 - - G4 E4 G4 A4 B4 | D5 - B4 G4 A4 B4 D5 G5 | F#5 - E5 D5 A4 - D5 - | E5 D5 C5 B4 A4 G4 A4 B4 | A4 - - - D5 . . .' },
@@ -115,6 +121,10 @@ const SON = (() => {
       mel: 'F#5 - A5 - D6 - A5 - | F#5 - D5 - B4 - D5 - | G5 - B5 - D6 - B5 - | A5 - - - E5 - - - | F#5 - A5 - D6 - E6 - | F#6 - D6 - B5 - A5 - | G5 - F#5 - E5 - G5 - | A5 - - - D5 - - -' },
     bano: { bpm: 126, acordes: 'Em C G D Em C G D', estilo: 'burbujas',
       mel: 'E5 . G5 . B5 . G5 E5 | C5 . E5 . G5 . E5 C5 | D5 . G5 . B5 A5 G5 D5 | F#5 . A5 . D5 - - . | E5 G5 B5 E6 D6 B5 G5 E5 | C5 E5 G5 C6 B5 G5 E5 C5 | B4 D5 G5 B5 A5 G5 F#5 D5 | E5 - - - . . B4 .' },
+    corredor: { bpm: 116, acordes: 'C F G C Am F G C', estilo: 'tranquila',
+      mel: 'G4 - C5 - E5 - D5 C5 | A4 - C5 - F5 - E5 D5 | D5 - B4 - G4 - B4 D5 | C5 - - - G4 - - - | E5 - E5 D5 C5 - A4 - | F5 - E5 - D5 - C5 - | D5 - E5 - F5 - D5 B4 | C5 - - - . . . .' },
+    keylin: { bpm: 132, acordes: 'Am Dm G C F Dm E Am', estilo: 'saltarina',
+      mel: 'A4 . C5 . E5 . C5 A4 | D5 . F5 . A5 . F5 D5 | B4 . D5 . G5 F5 E5 D5 | C5 . E5 . G5 - - . | A5 . F5 . C5 F5 A5 . | F5 E5 D5 . A4 D5 F5 . | E5 . G#4 . B4 . E5 D5 | C5 B4 A4 - - . . .' },
   };
   for (const k in CANC) {
     const c = CANC[k];

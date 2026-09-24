@@ -189,9 +189,10 @@ def patio():
     return capas
 
 
-import cuartos, cuartos2
+import cuartos, cuartos2, frente
 ESCENAS = {'patio': patio, 'cocina': cuartos2.cocina, 'sala': cuartos2.sala,
-           'cuarto': cuartos2.cuarto, 'bano': cuartos2.bano}
+           'cuarto': cuartos2.cuarto, 'bano': cuartos2.bano,
+           'corredor': frente.corredor, 'keylin': frente.casa_keylin}
 
 
 def guardar(nombre, capas):

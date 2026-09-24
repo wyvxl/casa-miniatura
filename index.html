@@ -81,6 +81,17 @@
     .tocar { display: block; }
   }
   @media (pointer: coarse) and (orientation: portrait) { #girar { display: grid; } }
+  /* La carta de Franco (su vida extra sorpresa) */
+  #carta { position: fixed; inset: 0; display: grid; place-items: center; background: radial-gradient(rgba(120,0,0,.55), rgba(10,0,0,.85)); z-index: 5; pointer-events: none; }
+  #carta img { height: min(86vh, 150vw); max-width: 92vw; object-fit: contain; border: 3px solid #f5c531; border-radius: 12px; box-shadow: 0 0 40px #ff3a20; }
+  #carta span { position: absolute; bottom: 5vh; font-weight: 900; font-size: clamp(22px, 6vh, 44px); color: #fff; text-shadow: 0 0 10px #ff3a20, 2px 2px 0 #7a0a00; letter-spacing: .06em; }
+  #carta.sale img { animation: carta 2.1s ease-out both; }
+  #carta.sale span { animation: vida 2.1s ease-out both; }
+  #carta.sale { animation: fondo 2.1s ease-out both; }
+  @keyframes carta { 0% { transform: scale(.3) rotate(-8deg); opacity: 0; filter: brightness(3); } 12% { transform: scale(1.06) rotate(2deg); opacity: 1; filter: brightness(1.6); } 20% { transform: scale(1) rotate(0); filter: brightness(1); } 85% { transform: scale(1.02); opacity: 1; } 100% { transform: scale(1.15); opacity: 0; } }
+  @keyframes vida { 0%, 25% { opacity: 0; transform: translateY(20px); } 35% { opacity: 1; transform: translateY(0); } 85% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes fondo { 0% { opacity: 0; } 8% { opacity: 1; } 88% { opacity: 1; } 100% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { #carta.sale img, #carta.sale span, #carta.sale { animation-duration: .01s; } }
   /* Con el menú abierto no se ven los botones del juego */
   body.en-menu .esquina, body.en-menu .tactil { display: none !important; }
   /* Pantallas bajas (el teléfono acostado): el menú entero sin deslizar */
@@ -121,6 +132,7 @@
   <button id="b-pantalla" type="button" aria-label="Pantalla completa" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path class="abrir" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path class="cerrar" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg></button>
   <button id="b-menu" type="button" aria-label="Menú">☰</button>
 </div>
+<div id="carta" hidden role="img" aria-label="Franco Franquiño, modo destrucción masiva: ¡una vida extra!"><img src="sprites/franco-card.jpg" alt=""><span>¡VIDA EXTRA!</span></div>
 <div id="aviso" role="status" hidden><b id="aviso-t"></b><span id="aviso-s"></span><br><button id="aviso-b" type="button" hidden></button></div>
 
 <div id="portada">
@@ -137,6 +149,7 @@
 </div>
 <div id="girar"><div><span>📱↻</span>Gira el teléfono para jugar</div></div>
 
+<link rel="preload" as="image" href="sprites/franco-card.jpg">
 <script src="datos.js"></script>
 <script src="niveles.js"></script>
 <script src="sonido.js"></script>

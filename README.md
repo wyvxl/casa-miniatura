@@ -1,7 +1,7 @@
 # La casa en miniatura · juego 2D
 
 Juego de plataformas en pixel art (pedido de la dueña, 2026-09-23). Franco, Alayna, Amanda, Keylin y Maritza se encogieron y
-cruzan la casa en miniatura, con Marshall detrás: el patio, la cocina, la sala, el cuarto y el baño. Es un juego aparte del
+cruzan la casa en miniatura, con Marshall detrás: el patio, la cocina, la sala, el cuarto, el baño, el corredor y la casa de Keylin. Es un juego aparte del
 modelo 3D (`../modelo-3d`).
 
 **Versión en línea** (publicado a pedido de la dueña el 2026-09-24): https://wyvxl.github.io/casa-miniatura/ —
@@ -37,6 +37,15 @@ H saludar, 1–5 cambiar de personaje, M sonido, Esc menú. También sirve un co
   iguana toma sol en su piedra en la capa del medio, medio escondida entre el zacate. El **hongo rojo** es un trampolín y los
   **charcos** resbalan. Hay **3 corazones**; sin corazones se empieza el cuarto otra vez.
 - **Marshall** sigue al personaje, salta si se queda atrás y ladra al empezar, al juntar el tesoro o las 8 estrellas y de vez en cuando.
+- **El corredor** (2026-09-24): el frente de la casa con la fachada blanca, el enchape de piedra, la puerta de madera, las
+  columnas, el cielo raso del alero con su bombillo y matas colgando; el piso es la piedrilla. Enemigos: larva y polilla.
+  Tesoro: una rueda de carreta. Amanda espera al final.
+- **La casa de Keylin** (2026-09-24): la rampa de concreto, el muro de bloques y la casa amarilla con techo rojo y fascias
+  vino; Keylin se asoma por la ventana, chismeando, y espera al final. Bloques, sacos de cemento y cubetas de pintura para
+  saltar, y cactus. Enemigo nuevo: la hormiga roja (dibujada en `frente.py`, dos cuadros), y un caracol. Tesoro: un colón de oro.
+- **Sorpresa solo para Franco** (`modoFuria` en `juego.js`, pedido de la dueña): al perder el último corazón sale su carta
+  (`sprites/franco-card.jpg`, "Modo: destrucción masiva") unos 2 s con el juego congelado y un sonido de poder, recibe un
+  corazón extra y parpadea en rojo hasta el final del cuarto. Una vez por cuarto.
 - **Keylin** anda en el patio y **Maritza** está sentada en su butaca en la sala (si no son las que se juegan); saludan al pasar cerca.
 - Música propia en cada cuarto y efectos de sonido, todo hecho con Web Audio en `sonido.js` (sin archivos de audio). El botón del parlante (en la esquina y en la portada) lo apaga, se tacha y lo recuerda; también la tecla M.
 
@@ -88,6 +97,7 @@ Todo con Python 3 + Pillow + numpy (+ scipy para `recortar_objetos.py`). Desde `
      los bananos en su caja) están **redibujados de frente o de lado** para
      que el ángulo calce con el juego; reemplazan a los recortados con el mismo nombre. También el cactus bajito.
    - `cuartos2.py`: pinta la cocina, la sala, el cuarto y el baño con esas piezas (el patio sigue en `escenarios.py`).
+   - `frente.py`: el corredor y la casa de Keylin, con sus objetos (bloque, saco, cubeta, sábila, tapete, tenis, bombillo) y la hormiga.
 6. `python datos.py` — junta los `.json` en `datos.js`. **Hay que correrlo después de cualquiera de los anteriores.**
 
 Los sprites que hice primero por código (antes de las hojas de la dueña) están en `herramientas/viejo/`.
@@ -117,6 +127,6 @@ Los sprites que hice primero por código (antes de las hojas de la dueña) está
 ## Pendiente / ideas
 
 - Probarlo en el teléfono de verdad (tamaño de los botones, que suene al tocar *Jugar* en el iPhone).
-- Más cuartos: el corredor y el frente con la piedrilla, la losa, la casa amarilla de Keylin.
+- Más cuartos: la losa (la terraza sobre el garaje, con la hamaca).
 - Guardar el avance (estrellas y tesoros por cuarto) y una pantalla final con los cinco tesoros.
 - Animaciones propias de saltar y caer (hoy usan cuadros de caminar) y de los enemigos (hoy se mecen).

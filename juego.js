@@ -30,6 +30,7 @@ const ENEMIGO = {
   rana:        { f: ['rana1'], muerto: 'rana2', modo: 'salta', vel: 60, brinco: 250, espera: 1.1 },
   saltamontes: { f: ['salta1', 'salta2'], muerto: 'salta2', modo: 'salta', vel: 80, brinco: 300, espera: 0.8 },
   polilla:     { f: ['polilla1'], muerto: 'polilla2', modo: 'vuela', vel: 34 },
+  hormiga:     { f: ['hormiga1', 'hormiga2'], muerto: 'hormiga_aplastada', modo: 'camina', vel: 40 },
 };
 
 // Busca un objeto por nombre: "o:xxx" en los dibujados por código (del cuarto o comunes), si no en las hojas dibujadas
@@ -112,7 +113,7 @@ function cargarCuarto(id) {
   const [tn, tx, ta] = N.tesoro;
   S.tes = { o: pieza(tn, id), n: tn, x: tx, y: SUELO - ta - 10, ok: false };
   S.puerta = { o: pieza('o:puertita', id), x: LARGO - 70 };
-  S.junto = 0; S.vidas = 3; S.fin = 0; S.parti = [];
+  S.junto = 0; S.vidas = 3; S.fin = 0; S.parti = []; S.extraUsada = false; S.congelado = 0;
   S.p = nuevoJugador();
   S.perro = { x: 22, y: SUELO, vx: 0, vy: 0, mira: 1, tAnim: 0 };
   S.cam = 0;
@@ -257,10 +258,22 @@ function lastimar(desde) {
   S.vidas--; p.inv = 1.6; p.golpe = 0.45;
   p.vx = (p.x < desde ? -1 : 1) * 160; p.vy = -200; p.piso = false;
   SON.efecto('golpe');
+  if (S.vidas <= 0 && S.quien === 'franco' && !S.extraUsada) { modoFuria(); return; }
   if (S.vidas <= 0) {
     S.fin = 1; SON.efecto('ay');
     cartel('¡Ay!', 'Se acabaron los corazones. Volvemos a empezar el cuarto.', 0, { txt: 'Otra vez', fn: () => cargarCuarto(S.cuarto) });
   }
+}
+// Sorpresa solo para Franco: al perder el último corazón sale su carta ("Modo: destrucción masiva") unos 2 s,
+// recibe un corazón extra y queda parpadeando en rojo hasta el final del cuarto. Una vez por cuarto.
+function modoFuria() {
+  const p = S.p;
+  S.extraUsada = true; S.vidas = 1; S.congelado = 2.1;
+  p.furia = true; p.inv = 3.5; p.golpe = 0; p.vx = 0; p.vy = 0;
+  const carta = document.getElementById('carta');
+  carta.hidden = false; carta.classList.remove('sale'); void carta.offsetWidth; carta.classList.add('sale');
+  SON.efecto('furia');
+  setTimeout(() => { carta.hidden = true; carta.classList.remove('sale'); }, 2100);
 }
 function siguiente() {
   const i = ORDEN.indexOf(S.cuarto), sig = ORDEN[(i + 1) % ORDEN.length];
@@ -277,6 +290,7 @@ function llegarPuerta() {
 // ---------- física
 const toca = (ax, ay, aw, ah, bx, by, bw, bh) => ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
 function paso(dt) {
+  if (S.congelado > 0) { S.congelado -= dt; return; }
   const p = S.p, pj = PJ[S.quien], alto = D.sprites[S.quien].h * 0.8;
   const pad = leerControl();
   const izq = K.ArrowLeft || K.a || K.A || K.tIzq || dedoDir < 0, der = K.ArrowRight || K.d || K.D || K.tDer || dedoDir > 0;
@@ -374,7 +388,7 @@ function paso(dt) {
   const T = S.tes;
   if (!T.ok && Math.abs(T.x - cx) < 13 && Math.abs(T.y - cy) < alto / 2 + 8) {
     T.ok = true; SON.efecto('tesoro'); particulas(T.x, T.y, '#fff2a0', 20, 90); setTimeout(() => SON.ladrar(2), 500);
-    cartel('¡Un tesoro!', { llave: 'Una llave vieja', brujula: 'Una brújula', reloj: 'Un reloj de bolsillo', mapa: 'Un mapa del tesoro', canica: 'Una canica de colores' }[T.n] || '', 1800);
+    cartel('¡Un tesoro!', { llave: 'Una llave vieja', brujula: 'Una brújula', reloj: 'Un reloj de bolsillo', mapa: 'Un mapa del tesoro', canica: 'Una canica de colores', 'p:rueda': 'Una rueda de carreta', 'p:colon_oro': 'Un colón de oro' }[T.n] || '', 1800);
   }
   if (p.x > S.puerta.x + 8 && p.x < S.puerta.x + 32 && p.piso) llegarPuerta();
 
@@ -407,15 +421,27 @@ function capa(file, factor) {
   if (x > 0) x -= w;
   for (; x < VW; x += w) g.drawImage(im, Math.round(x), 0);
 }
-function sprite(nombre, anim, t, x, y, mira) {
+const TINTE = document.createElement('canvas'), tg = TINTE.getContext('2d');
+function sprite(nombre, anim, t, x, y, mira, rojo) {
   const m = D.sprites[nombre], im = IMG['sprites/' + nombre + '.png'];
   if (!m || !im.complete) return;
   const a = m.anims[anim] || m.anims.quieto;
   const f = a.frames[Math.floor(t * a.fps) % a.frames.length];
+  let fuente = im, sx = f * m.w;
+  if (rojo) {                                      // modo furia: el cuadro teñido de rojo
+    TINTE.width = m.w; TINTE.height = m.h;
+    tg.imageSmoothingEnabled = false;
+    tg.drawImage(im, sx, 0, m.w, m.h, 0, 0, m.w, m.h);
+    tg.globalCompositeOperation = 'source-atop';
+    tg.fillStyle = `rgba(255,${30 + Math.round(40 * rojo)},20,${rojo})`;
+    tg.fillRect(0, 0, m.w, m.h);
+    tg.globalCompositeOperation = 'source-over';
+    fuente = TINTE; sx = 0;
+  }
   g.save();
   g.translate(Math.round(x - S.cam), Math.round(y));
   if (mira < 0) g.scale(-1, 1);
-  g.drawImage(im, f * m.w, 0, m.w, m.h, -Math.floor(m.w / 2), -m.h + 1, m.w, m.h);
+  g.drawImage(fuente, sx, 0, m.w, m.h, -Math.floor(m.w / 2), -m.h + 1, m.w, m.h);
   g.restore();
 }
 function pieza2d(o, x, y, mira, sy) {
@@ -458,7 +484,7 @@ function marcador() {
   const mo = D.cosas.moneda1;
   g.drawImage(COSAS, mo.x, mo.y, mo.w, mo.h, 84, 4, 12, 12);
   texto(S.colones, 98, 8, '#eef2f4');
-  if (S.tes.ok) { const o = S.tes.o; g.drawImage(COSAS, o.x, o.y, o.w, o.h, 124, 3, Math.round(o.w * 13 / o.h), 13); }
+  if (S.tes.ok) { const o = S.tes.o; g.drawImage(o.hoja, o.x, o.y, o.w, o.h, 124, 3, Math.round(o.w * 13 / o.h), 13); }
 }
 function dibujar() {
   const E = D.escenarios[S.cuarto], vis = (x, w) => x - S.cam < VW + 10 && x + w - S.cam > -10;
@@ -503,7 +529,7 @@ function dibujar() {
     const o = T.o, bob = Math.sin(S.t * 2.4) * 2;
     g.fillStyle = `rgba(255,240,150,${0.25 + 0.15 * Math.sin(S.t * 5)})`;
     g.beginPath(); g.arc(T.x - S.cam, T.y + bob, 12, 0, 7); g.fill();
-    g.drawImage(COSAS, o.x, o.y, o.w, o.h, Math.round(T.x - S.cam - o.w / 2), Math.round(T.y - o.h / 2 + bob), o.w, o.h);
+    g.drawImage(o.hoja, o.x, o.y, o.w, o.h, Math.round(T.x - S.cam - o.w / 2), Math.round(T.y - o.h / 2 + bob), o.w, o.h);
   }
   for (const e of S.enem) {
     if (!vis(e.x - 30, 60)) continue;
@@ -518,6 +544,7 @@ function dibujar() {
     // cuadro: el de brincar si va en el aire; si no, alterna
     let fn = E.f[0];
     if (E.modo === 'salta' && !e.suelo && E.f[1]) fn = E.f[1];
+    else if (E.modo === 'camina' && E.f.length > 1) fn = E.f[Math.floor(e.t * 10) % E.f.length];   // patitas
     const o = pieza('p:' + fn);
     let sy = 0, bob = 0;
     if (E.estira) sy = 1 + Math.sin(e.t * 6) * 0.08;                 // orugas y larvas se estiran al avanzar
@@ -539,7 +566,8 @@ function dibujar() {
   if (!(p.inv > 0 && Math.floor(S.t * 16) % 2)) {
     const anim = !p.piso ? (p.vy < 0 ? 'saltar' : 'caer') : Math.abs(p.vx) > 8 ? 'correr' : p.hola > 0 ? 'hola' : 'quieto';
     const respira = anim === 'quieto' && Math.floor(S.t * 1.4) % 2 ? 1 : 0;
-    sprite(S.quien, anim, p.tAnim, p.x, p.y + respira, p.mira);
+    const rojo = p.furia && S.quien === 'franco' ? 0.2 + 0.4 * Math.abs(Math.sin(S.t * 9)) : 0;
+    sprite(S.quien, anim, p.tAnim, p.x, p.y + respira, p.mira, rojo);
   }
   for (const a of S.parti) { g.fillStyle = a.c; g.fillRect(Math.round(a.x - S.cam), Math.round(a.y), 2, 2); }
   g.restore();

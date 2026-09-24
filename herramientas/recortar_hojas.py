@@ -12,6 +12,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 from scipy import ndimage
 import muebles
+import frente
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 REF = os.path.join(AQUI, '..', 'referencias', 'escenarios')
@@ -190,6 +191,21 @@ PIEZAS = {
     'bananos_canasta': ('patio', (705, 690), 1, 'plataforma', 6),
     'balde_patio': ('patio', (900, 690), 1, 'plataforma', 5),
     'iguana':      ('patio', (510, 680), 1, 'fondo', 0),
+    'maceta_colgante': ('patio', (300, 320), 2, 'fondo', 0),
+    # tesoros de los escenarios nuevos (hoja del cuarto)
+    'rueda':       ('cuarto', (1270, 272), 1, 'tesoro', 0),
+    'colon_oro':   ('cuarto', (1170, 275), 1, 'tesoro', 0),
+    # corredor y casa de Keylin: dibujados en frente.py
+    'bloque':      ('patio', (0, 0), 1, 'plataforma', 1),
+    'saco':        ('patio', (0, 0), 1, 'plataforma', 4),
+    'cubeta':      ('patio', (0, 0), 1, 'plataforma', 3),
+    'sabila':      ('patio', (0, 0), 1, 'plataforma', 20),
+    'tapete':      ('patio', (0, 0), 1, 'adorno', 0),
+    'tenis':       ('patio', (0, 0), 1, 'adorno', 0),
+    'hormiga1':    ('patio', (0, 0), 1, 'enemigo', 0),
+    'hormiga2':    ('patio', (0, 0), 1, 'enemigo', 0),
+    'hormiga_aplastada': ('patio', (0, 0), 1, 'enemigo', 0),
+    'bombillo':    ('patio', (0, 0), 1, 'fondo', 0),
 }
 SIN_LETRERO = {'cafe_britt', 'molinillo', 'taza_cr', 'olla', 'gallo_pinto', 'tortillas', 'lizano', 'bananos', 'guacal', 'tarrina', 'salero'}
 BLANCOS = {'jabon_soap', 'clover', 'protex', 'nivea', 'salero', 'panuelos', 'espejo'}
@@ -347,7 +363,7 @@ def main():
     os.makedirs(os.path.join(SAL, 'piezas'), exist_ok=True)
     ims = {}
     for n, (hoja, punto, escala, tipo, hundir) in PIEZAS.items():
-        ims[n] = suelto(n) if n in SUELTOS else muebles.DIBUJADOS[n]() if n in muebles.DIBUJADOS else pieza(n, hoja, punto, escala)
+        ims[n] = suelto(n) if n in SUELTOS else muebles.DIBUJADOS[n]() if n in muebles.DIBUJADOS else frente.DIBUJADOS[n]() if n in frente.DIBUJADOS else pieza(n, hoja, punto, escala)
         ims[n].save(os.path.join(SAL, 'piezas', n + '.png'))
     # hoja para el juego: solo lo que se juega (lo de fondo se pinta en las capas)
     jugables = [n for n in PIEZAS if PIEZAS[n][3] != 'fondo']
