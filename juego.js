@@ -257,7 +257,7 @@ function lastimar(desde) {
   if (p.inv > 0 || S.fin) return;
   S.vidas--; p.inv = 1.6; p.golpe = 0.45;
   p.vx = (p.x < desde ? -1 : 1) * 160; p.vy = -200; p.piso = false;
-  SON.efecto('golpe');
+  SON.efecto('golpe'); FX.sacudir(0.25, 2);
   if (S.vidas <= 0 && S.quien === 'franco' && !S.extraUsada) { modoFuria(); return; }
   if (S.vidas <= 0) {
     S.fin = 1; SON.efecto('ay');
@@ -371,6 +371,7 @@ function paso(dt) {
     if (toca(p.x - 5, p.y - alto, 10, alto, ex, ey, w - 8, h - 3)) {
       if (p.vy > 40 && yAntes <= ey + 8) {
         e.vivo = false; p.vy = -260; p.rebote = true; SON.efecto('pisar'); particulas(e.x, e.y - 6, '#e8e0c8', 10, 70);
+        FX.sacudir(0.12, 1); FX.numero(e.x, e.y - 22, '+2');
         if (E.modo !== 'camina') e.cae = true;   // lo que salta o vuela cae al piso aplastado
         S.colones += 2;
       } else lastimar(e.x);
@@ -380,14 +381,15 @@ function paso(dt) {
   const cx = p.x, cy = p.y - alto / 2;
   for (const m of S.mon) if (!m.ok && Math.abs(m.x - cx) < 11 && Math.abs(m.y - cy) < alto / 2 + 6) {
     m.ok = true; S.colones += m.dos ? 2 : 1; SON.efecto('moneda'); particulas(m.x, m.y, '#eef2f4', 4, 40);
+    FX.numero(m.x, m.y - 10, m.dos ? '+2' : '+1');
   }
   for (const e of S.est) if (!e.ok && Math.abs(e.x - cx) < 12 && Math.abs(e.y - cy) < alto / 2 + 8) {
-    e.ok = true; S.junto++; SON.efecto('estrella', S.junto); particulas(e.x, e.y, '#ffd84a', 12, 70);
+    e.ok = true; S.junto++; SON.efecto('estrella', S.junto); particulas(e.x, e.y, '#ffd84a', 12, 70); FX.estallido(e.x, e.y, '#fff2a0');
     if (S.junto === S.est.length) { cartel('¡Las 8 estrellas!', 'Ahora busca la puertita al final', 2200); setTimeout(() => SON.ladrar(3), 300); }
   }
   const T = S.tes;
   if (!T.ok && Math.abs(T.x - cx) < 13 && Math.abs(T.y - cy) < alto / 2 + 8) {
-    T.ok = true; SON.efecto('tesoro'); particulas(T.x, T.y, '#fff2a0', 20, 90); setTimeout(() => SON.ladrar(2), 500);
+    T.ok = true; SON.efecto('tesoro'); particulas(T.x, T.y, '#fff2a0', 20, 90); FX.estallido(T.x, T.y, '#ffd84a'); FX.sacudir(0.15, 1); setTimeout(() => SON.ladrar(2), 500);
     cartel('¡Un tesoro!', { llave: 'Una llave vieja', brujula: 'Una brújula', reloj: 'Un reloj de bolsillo', mapa: 'Un mapa del tesoro', canica: 'Una canica de colores', 'p:rueda': 'Una rueda de carreta', 'p:colon_oro': 'Un colón de oro' }[T.n] || '', 1800);
   }
   if (p.x > S.puerta.x + 8 && p.x < S.puerta.x + 32 && p.piso) llegarPuerta();
@@ -410,6 +412,7 @@ function paso(dt) {
 
   const quiereCam = Math.max(0, Math.min(LARGO - VW, p.x - VW * 0.42 + p.mira * 30));
   S.cam += (quiereCam - S.cam) * Math.min(1, dt * 5);
+  FX.paso(dt);
 }
 
 // ---------- dibujo
@@ -438,6 +441,7 @@ function sprite(nombre, anim, t, x, y, mira, rojo) {
     tg.globalCompositeOperation = 'source-over';
     fuente = TINTE; sx = 0;
   }
+  FX.reflejo(fuente, sx, 0, m.w, m.h, x, y, mira);
   g.save();
   g.translate(Math.round(x - S.cam), Math.round(y));
   if (mira < 0) g.scale(-1, 1);
@@ -456,10 +460,12 @@ function sombra(x, y, w) {
   const k = Math.max(0.35, 1 - Math.max(0, SUELO - y) / 120), ww = Math.round(w * k);
   g.fillStyle = `rgba(20,10,10,${0.28 * k})`;
   g.fillRect(Math.round(x - S.cam - ww / 2), SUELO - 1, ww, 2);
+  g.fillStyle = `rgba(20,10,10,${0.12 * k})`;
+  g.fillRect(Math.round(x - S.cam - ww / 2) - 2, SUELO, ww + 4, 1);
 }
 // números y letras en pixeles (3x5) para el marcador
 const FUENTE = { 0: '111101101101111', 1: '010110010010111', 2: '111001111100111', 3: '111001111001111', 4: '101101111001001',
-  5: '111100111001111', 6: '111100111101111', 7: '111001010010010', 8: '111101111101111', 9: '111101111001111', '/': '001001010100100' };
+  5: '111100111001111', 6: '111100111101111', 7: '111001010010010', 8: '111101111101111', 9: '111101111001111', '/': '001001010100100', '+': '000010111010000' };
 function texto(s, x, y, c) {
   g.fillStyle = '#2a1a16';
   for (const pass of [1, 0]) {
@@ -474,6 +480,7 @@ function texto(s, x, y, c) {
 }
 function marcador() {
   const cm = D.objetos.objetos.comun;
+  FX.panel(Math.max(98 + String(S.colones).length * 4 + 3, S.tes.ok ? 142 : 0));
   for (let i = 0; i < 3; i++) {
     const o = i < S.vidas ? cm.corazon : cm.corazon_vacio;
     g.drawImage(OBJ, o.x, o.y, o.w, o.h, 6 + i * 11, 6, o.w, o.h);
@@ -488,8 +495,10 @@ function marcador() {
 }
 function dibujar() {
   const E = D.escenarios[S.cuarto], vis = (x, w) => x - S.cam < VW + 10 && x + w - S.cam > -10;
-  const frente = [];
+  const frente = [], [sx, sy] = FX.desplazo();
+  g.save(); g.translate(sx, sy);
   for (const c of E.capas) { if (c.factor > 1) frente.push(c); else capa(c.file, c.factor); }
+  FX.fondo();
   // lo que se juega se dibuja unos pixeles más adentro del piso: parado sobre él y no en el borde con la pared
   g.save(); g.translate(0, NIVELES[S.cuarto].hundir || 0);
   for (const q of S.cosas) {
@@ -552,6 +561,7 @@ function dibujar() {
     if (E.modo === 'vuela') sy = 0.75 + Math.abs(Math.sin(e.t * 16)) * 0.25;   // aleteo
     if (E.modo === 'salta' && e.suelo && e.espera < 0.15) sy = 0.85;  // se agacha antes de brincar
     sombra(e.x, E.modo === 'camina' || e.suelo ? SUELO : e.y, o.w * 0.6);
+    FX.reflejo(o.hoja, o.x, o.y, o.w, o.h, e.x, e.y, e.dir);
     pieza2d(o, e.x - S.cam - o.w / 2, e.y - o.h + bob, e.dir, sy);
   }
   for (const [n, anim, x] of NIVELES[S.cuarto].npc) {
@@ -570,8 +580,11 @@ function dibujar() {
     sprite(S.quien, anim, p.tAnim, p.x, p.y + respira, p.mira, rojo);
   }
   for (const a of S.parti) { g.fillStyle = a.c; g.fillRect(Math.round(a.x - S.cam), Math.round(a.y), 2, 2); }
+  FX.delante();
   g.restore();
   for (const c of frente) capa(c.file, c.factor);
+  g.restore();
+  FX.pantalla();
   marcador();
 }
 

@@ -57,6 +57,7 @@ juego-2d/
 ├── juego.js        física, enemigos, cámara, dibujo, marcador, controles y las revisiones automáticas
 ├── niveles.js      qué hay en cada cuarto (cosas, enemigos, monedas, estrellas, tesoro, personajes)
 ├── sonido.js       música por cuarto y efectos (Web Audio)
+├── efectos.js      ambiente en pixel art: aire de cada cuarto, luces, reflejos, viñeta, sacudida, "+1" y marco del marcador
 ├── datos.js        hecho por herramientas/datos.py
 ├── sprites/        tiras de cada personaje + sprites.json (tamaño de cuadro y animaciones)
 ├── escenarios/     capas de cada cuarto (<cuarto>/*.png), objetos.png (dibujados por código), cosas.png (de las hojas dibujadas) y sus .json
@@ -98,9 +99,32 @@ Todo con Python 3 + Pillow + numpy (+ scipy para `recortar_objetos.py`). Desde `
      que el ángulo calce con el juego; reemplazan a los recortados con el mismo nombre. También el cactus bajito.
    - `cuartos2.py`: pinta la cocina, la sala, el cuarto y el baño con esas piezas (el patio sigue en `escenarios.py`).
    - `frente.py`: el corredor y la casa de Keylin, con sus objetos (bloque, saco, cubeta, sábila, tapete, tenis, bombillo) y la hormiga.
-6. `python datos.py` — junta los `.json` en `datos.js`. **Hay que correrlo después de cualquiera de los anteriores.**
+6. `python texturas.py [cuarto …]` — textura y luz en pixel art para `pared.png` y `suelo.png` (2026-11-19): grano de
+   repello de un pixel solo donde la pared es lisa (no toca cuadros, muebles ni azulejos), penumbra tramada arriba y sombra
+   contra el piso; en el piso, grano según el material (`CUARTOS`: cerámica con brillo arriba, vetas en la madera del cuarto,
+   piedrilla y concreto) y la orilla de adelante más oscura. Deja una marca en el PNG y no lo procesa dos veces: correrlo
+   **después** de volver a pintar un fondo.
+7. `python datos.py` — junta los `.json` en `datos.js`. **Hay que correrlo después de cualquiera de los anteriores.**
 
 Los sprites que hice primero por código (antes de las hojas de la dueña) están en `herramientas/viejo/`.
+
+## Ambiente y efectos (`efectos.js`, 2026-11-19)
+
+Todo dibujado en la resolución del juego, con pixeles enteros y tramado Bayer, así que sigue siendo pixel art al agrandar.
+La configuración de cada cuarto está en `CFG`:
+
+- **Aire de cada cuarto:** semillas que flotan y mariposas en el patio y donde Keylin; vapor que sube de la olla, el gallo
+  pinto y la taza en la cocina; polvito que brilla en el sol de la ventana en la sala y el cuarto; burbujitas en el baño;
+  palomillas dando vueltas al bombillo del corredor.
+- **Luces tramadas** pegadas a la pared (se mueven con su paralaje): el bombillo del corredor titila de vez en cuando; el
+  sol de las ventanas de la sala y el cuarto.
+- **Reflejo** de los personajes, Marshall y los enemigos en los pisos que brillan (sala, baño y, más suave, la cocina).
+- **Viñeta** tramada en las esquinas, del tono de cada cuarto; **sacudida** corta de la pantalla al recibir un golpe, al
+  aplastar un enemigo o al juntar el tesoro; **"+1" / "+2"** que suben al juntar monedas o aplastar; aro de chispas en las
+  estrellas y el tesoro; sombra de los personajes con dos filas.
+- **Marco del marcador:** fondo oscuro con borde claro de un pixel, que se lee sobre cualquier fondo.
+- Probado a 60 cuadros por segundo; son pocas partículas (unas 20 por cuarto) y la viñeta y las luces se dibujan una sola
+  vez al empezar y después solo se copian.
 
 ## Reglas de los niveles (`niveles.js`)
 
